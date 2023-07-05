@@ -61,22 +61,22 @@ MyFrame::MyFrame() : wxFrame(nullptr, wxID_ANY, "Average Grade Calculator") {
     wxBoxSizer* horizontalSizer = new wxBoxSizer(wxHORIZONTAL);
     wxListView* list = new wxListView(this, ID_LIST, wxDefaultPosition, wxDefaultSize, 32L | wxLC_SINGLE_SEL);
 
-    horizontalSizer->Add(list, 1, wxEXPAND | wxALL, 10);
+    horizontalSizer->Add(list, 1, wxEXPAND | wxALL, FromDIP(10));
     list->AppendColumn("Course");
     list->AppendColumn("Grade");
     list->AppendColumn("Weight");
 
     wxBoxSizer* controlSizer = new wxBoxSizer(wxVERTICAL);
-    horizontalSizer->Add(controlSizer, 0, wxALL, 10);
+    horizontalSizer->Add(controlSizer, 0, wxALL, FromDIP(10));
 
     wxBoxSizer* buttonContainer = new wxBoxSizer(wxHORIZONTAL);
-    buttonContainer->Add(new wxButton(this, ID_ADD, "+", wxDefaultPosition, wxSize(40, -1)), 0, wxRIGHT, 10);
-    buttonContainer->Add(new wxButton(this, ID_REMOVE, "-", wxDefaultPosition, wxSize(40, -1)), 0, wxRIGHT, 10);
-    buttonContainer->Add(new wxButton(this, ID_UP, "Up", wxDefaultPosition, wxSize(50, -1)), 0, wxRIGHT, 10);
-    buttonContainer->Add(new wxButton(this, ID_DOWN, "Down", wxDefaultPosition, wxSize(50, -1)));
-    controlSizer->Add(buttonContainer, 0, wxBOTTOM, 20);
+    buttonContainer->Add(new wxButton(this, ID_ADD, "+", wxDefaultPosition, FromDIP(wxSize(40, -1))), 0, wxRIGHT, FromDIP(10));
+    buttonContainer->Add(new wxButton(this, ID_REMOVE, "-", wxDefaultPosition, FromDIP(wxSize(40, -1))), 0, wxRIGHT, FromDIP(10));
+    buttonContainer->Add(new wxButton(this, ID_UP, "Up", wxDefaultPosition, FromDIP(wxSize(50, -1))), 0, wxRIGHT, FromDIP(10));
+    buttonContainer->Add(new wxButton(this, ID_DOWN, "Down", wxDefaultPosition, FromDIP(wxSize(50, -1))));
+    controlSizer->Add(buttonContainer, 0, wxBOTTOM, FromDIP(20));
 
-    wxFlexGridSizer* colControlContainer = new wxFlexGridSizer(3, 2, wxSize(10, 10));
+    wxFlexGridSizer* colControlContainer = new wxFlexGridSizer(3, 2, FromDIP(wxSize(10, 10)));
 
     auto keyText = new wxTextCtrl(this, wxID_ANY);
     colControlContainer->Add(new wxStaticText(this, wxID_ANY, "Course"), 1);
@@ -91,11 +91,11 @@ MyFrame::MyFrame() : wxFrame(nullptr, wxID_ANY, "Average Grade Calculator") {
     colControlContainer->Add(new wxStaticText(this, wxID_ANY, "Weight"), 1);
     colControlContainer->Add(weightCtrl, 1);
 
-    controlSizer->Add(colControlContainer, 0, wxBOTTOM, 20);
+    controlSizer->Add(colControlContainer, 0, wxBOTTOM, FromDIP(20));
 
     auto applyButton = new wxButton(this, ID_APPLY, "Apply");
     applyButton->Enable(false);
-    controlSizer->Add(applyButton, 0, wxALIGN_CENTER | wxBOTTOM, 20);
+    controlSizer->Add(applyButton, 0, wxALIGN_CENTER | wxBOTTOM, FromDIP(20));
 
     auto averageText = new wxStaticText(this, wxID_ANY, "Average: N/A");
     controlSizer->Add(averageText, 0, wxALIGN_CENTER);

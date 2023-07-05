@@ -8,7 +8,7 @@
 #include <vector>
 #include <algorithm>
 
-class AvgCalc : public wxApp {
+class AvgGradeCalc : public wxApp {
 public:
     virtual bool OnInit();
 };
@@ -31,7 +31,7 @@ struct Entry {
     int value, weight;
 };
 
-wxIMPLEMENT_APP(AvgCalc);
+wxIMPLEMENT_APP(AvgGradeCalc);
 
 std::vector<Entry> entries;
 
@@ -48,7 +48,7 @@ void updateAverageText(wxStaticText* averageText) {
     averageText->SetLabelText("Average: " + wxString::Format(wxT("%f"), calculateAverage()));
 }
 
-bool AvgCalc::OnInit() {
+bool AvgGradeCalc::OnInit() {
     MyFrame *frame = new MyFrame();
     frame->Show(true);
     return true;

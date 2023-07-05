@@ -54,7 +54,7 @@ bool AvgGradeCalc::OnInit() {
     return true;
 }
 
-MyFrame::MyFrame() : wxFrame(nullptr, wxID_ANY, "Average Calculator") {
+MyFrame::MyFrame() : wxFrame(nullptr, wxID_ANY, "Average Grade Calculator") {
 	SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_FRAMEBK));
 	
     wxBoxSizer* horizontalSizer = new wxBoxSizer(wxHORIZONTAL);

@@ -15,7 +15,7 @@ endif
 calc:
 	mkdir -p bin
 ifeq ($(OS),Windows_NT)
-	windres --include-dir "/ucrt64/include/wx-3.0" src/AvgGradeCalc.rc -o $(RC_OBJECT)
+	windres --include-dir "/ucrt64/include/wx-3.2" src/AvgGradeCalc.rc -o $(RC_OBJECT)
 endif
 	g++ src/*.cpp `$(WX_CONFIG) --cxxflags --libs` $(STATIC_FLAG) -o $(OUT_NAME) $(RC_OBJECT)
 clean:

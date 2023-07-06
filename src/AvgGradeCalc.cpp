@@ -76,10 +76,16 @@ MyFrame::MyFrame() : wxFrame(nullptr, wxID_ANY, "Average Grade Calculator") {
     horizontalSizer->Add(controlSizer, 0, wxALL, FromDIP(10));
 
     wxBoxSizer* buttonContainer = new wxBoxSizer(wxHORIZONTAL);
+    wxButton* removeButton = new wxButton(this, ID_REMOVE, "-", wxDefaultPosition, FromDIP(wxSize(40, -1)));
+    wxButton* upButton = new wxButton(this, ID_UP, "Up", wxDefaultPosition, FromDIP(wxSize(50, -1)));
+    wxButton* downButton = new wxButton(this, ID_DOWN, "Down", wxDefaultPosition, FromDIP(wxSize(50, -1)));
+    removeButton->Enable(false);
+    upButton->Enable(false);
+    downButton->Enable(false);
     buttonContainer->Add(new wxButton(this, ID_ADD, "+", wxDefaultPosition, FromDIP(wxSize(40, -1))), 0, wxRIGHT, FromDIP(10));
-    buttonContainer->Add(new wxButton(this, ID_REMOVE, "-", wxDefaultPosition, FromDIP(wxSize(40, -1))), 0, wxRIGHT, FromDIP(10));
-    buttonContainer->Add(new wxButton(this, ID_UP, "Up", wxDefaultPosition, FromDIP(wxSize(50, -1))), 0, wxRIGHT, FromDIP(10));
-    buttonContainer->Add(new wxButton(this, ID_DOWN, "Down", wxDefaultPosition, FromDIP(wxSize(50, -1))));
+    buttonContainer->Add(removeButton, 0, wxRIGHT, FromDIP(10));
+    buttonContainer->Add(upButton, 0, wxRIGHT, FromDIP(10));
+    buttonContainer->Add(downButton);
     controlSizer->Add(buttonContainer, 0, wxBOTTOM, FromDIP(20));
 
     wxCheckBox* reselectRemoveBox = new wxCheckBox(this, wxID_ANY, "Select next after removal");
@@ -191,10 +197,16 @@ MyFrame::MyFrame() : wxFrame(nullptr, wxID_ANY, "Average Grade Calculator") {
         gradeCtrl->SetValue(entries.at(i).value);
         weightCtrl->SetValue(entries.at(i).weight);
         applyButton->Enable(true);
+        removeButton->Enable(true);
+        upButton->Enable(true);
+        downButton->Enable(true);
     }, ID_LIST);
 
     Bind(wxEVT_LIST_ITEM_DESELECTED, [=](wxListEvent& event) {
         applyButton->Enable(false);
+        removeButton->Enable(false);
+        upButton->Enable(false);
+        downButton->Enable(false);
     }, ID_LIST);
 
     Bind(wxEVT_BUTTON, [=](wxCommandEvent&) {

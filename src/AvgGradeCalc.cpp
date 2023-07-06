@@ -151,7 +151,7 @@ MyFrame::MyFrame() : wxFrame(nullptr, wxID_ANY, "Average Grade Calculator") {
         entries.erase(entries.begin() + i);
 
         if (reselectRemoveBox->IsChecked() && entries.size() > 0)
-            list->Select(std::min((unsigned long long) i, entries.size()-1));
+            list->Select(std::min(i, (long) entries.size()-1));
         ignoreDeselect = false;
         updateAverageText(averageText);
     }, ID_REMOVE);

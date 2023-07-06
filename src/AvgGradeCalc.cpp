@@ -17,6 +17,8 @@ public:
 class MyFrame : public wxFrame {
 public:
     MyFrame();
+private:
+    bool ignoreDeselect = false;
 };
 
 enum {
@@ -137,13 +139,20 @@ MyFrame::MyFrame() : wxFrame(nullptr, wxID_ANY, "Average Grade Calculator") {
     }, ID_ADD);
 
     Bind(wxEVT_BUTTON, [=](wxCommandEvent&) {
-        long prev_i = -1;
-        for (long i = list->GetFirstSelected(); i != -1; prev_i = i, i = list->GetFirstSelected()) {
-            list->DeleteItem(i);
-            entries.erase(entries.begin() + i);
-        }
-        if (reselectRemoveBox->IsChecked() && prev_i != -1)
-            list->Select(std::min((unsigned long long) prev_i, entries.size()-1));
+        long i = list->GetFirstSelected();
+        if (i == -1)
+            // Nothing to delete
+            return;
+
+        if (reselectRemoveBox->IsChecked() && entries.size() > 1)
+            ignoreDeselect = true;
+
+        list->DeleteItem(i);
+        entries.erase(entries.begin() + i);
+
+        if (reselectRemoveBox->IsChecked() && entries.size() > 0)
+            list->Select(std::min((unsigned long long) i, entries.size()-1));
+        ignoreDeselect = false;
         updateAverageText(averageText);
     }, ID_REMOVE);
 
@@ -157,6 +166,7 @@ MyFrame::MyFrame() : wxFrame(nullptr, wxID_ANY, "Average Grade Calculator") {
         std::vector<wxString> colValues;
 
         list->Freeze(); 
+        ignoreDeselect = true;
         wxListItem item; 
         item.SetId(i);
         list->GetItem(item);
@@ -170,6 +180,7 @@ MyFrame::MyFrame() : wxFrame(nullptr, wxID_ANY, "Average Grade Calculator") {
             list->SetItem(j, c, colValues.at(c));
         }
         list->Select(i - 1);
+        ignoreDeselect = false;
         list->Thaw();
     }, ID_UP);
 
@@ -183,6 +194,7 @@ MyFrame::MyFrame() : wxFrame(nullptr, wxID_ANY, "Average Grade Calculator") {
         std::vector<wxString> colValues;
 
         list->Freeze(); 
+        ignoreDeselect = true;
         wxListItem item; 
         item.SetId(i);
         list->GetItem(item);
@@ -196,6 +208,7 @@ MyFrame::MyFrame() : wxFrame(nullptr, wxID_ANY, "Average Grade Calculator") {
             list->SetItem(j, c, colValues.at(c));
         }
         list->Select(i + 1);
+        ignoreDeselect = false;
         list->Thaw();
     }, ID_DOWN);
 
@@ -213,6 +226,8 @@ MyFrame::MyFrame() : wxFrame(nullptr, wxID_ANY, "Average Grade Calculator") {
     }, ID_LIST);
 
     Bind(wxEVT_LIST_ITEM_DESELECTED, [=](wxListEvent& event) {
+        if (ignoreDeselect)
+            return;
         applyButton->Enable(false);
         removeButton->Enable(false);
         upButton->Enable(false);

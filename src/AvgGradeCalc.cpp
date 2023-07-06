@@ -147,6 +147,7 @@ MyFrame::MyFrame() : wxFrame(nullptr, wxID_ANY, "Average Grade Calculator") {
         if (reselectRemoveBox->IsChecked() && entries.size() > 1)
             ignoreDeselect = true;
 
+        list->Select(i, false);
         list->DeleteItem(i);
         entries.erase(entries.begin() + i);
 

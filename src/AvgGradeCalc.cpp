@@ -76,6 +76,9 @@ MyFrame::MyFrame() : wxFrame(nullptr, wxID_ANY, "Average Grade Calculator") {
     buttonContainer->Add(new wxButton(this, ID_DOWN, "Down", wxDefaultPosition, FromDIP(wxSize(50, -1))));
     controlSizer->Add(buttonContainer, 0, wxBOTTOM, FromDIP(20));
 
+    wxCheckBox* reselectRemoveBox = new wxCheckBox(this, wxID_ANY, "Select next after removal");
+    controlSizer->Add(reselectRemoveBox, 0, wxBOTTOM, FromDIP(20));
+
     wxFlexGridSizer* colControlContainer = new wxFlexGridSizer(3, 2, FromDIP(wxSize(10, 10)));
 
     auto keyText = new wxTextCtrl(this, wxID_ANY);
@@ -117,7 +120,7 @@ MyFrame::MyFrame() : wxFrame(nullptr, wxID_ANY, "Average Grade Calculator") {
             list->DeleteItem(i);
             entries.erase(entries.begin() + i);
         }
-        if (prev_i != -1)
+        if (reselectRemoveBox->IsChecked() && prev_i != -1)
             list->Select(std::min((unsigned long long) prev_i, entries.size()-1));
         updateAverageText(averageText);
     }, ID_REMOVE);

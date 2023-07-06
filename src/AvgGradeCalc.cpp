@@ -82,14 +82,16 @@ MyFrame::MyFrame() : wxFrame(nullptr, wxID_ANY, "Average Grade Calculator") {
     colControlContainer->Add(new wxStaticText(this, wxID_ANY, "Course"), 1);
     colControlContainer->Add(keyText, 1);
 
-    auto gradeCtrl = new wxSpinCtrl(this, wxID_ANY);
+    auto gradeCtrl = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+        wxDefaultSize, wxALIGN_RIGHT | wxSP_ARROW_KEYS);
     gradeCtrl->SetRange(0, 20);
     colControlContainer->Add(new wxStaticText(this, wxID_ANY, "Grade"), 1);
-    colControlContainer->Add(gradeCtrl, 1);
+    colControlContainer->Add(gradeCtrl, 1, wxEXPAND);
 
-    auto weightCtrl = new wxSpinCtrl(this, wxID_ANY);
+    auto weightCtrl = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+        wxDefaultSize, wxALIGN_RIGHT | wxSP_ARROW_KEYS);
     colControlContainer->Add(new wxStaticText(this, wxID_ANY, "Weight"), 1);
-    colControlContainer->Add(weightCtrl, 1);
+    colControlContainer->Add(weightCtrl, 1, wxEXPAND);
 
     controlSizer->Add(colControlContainer, 0, wxBOTTOM, FromDIP(20));
 

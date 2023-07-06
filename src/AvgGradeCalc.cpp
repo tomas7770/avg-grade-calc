@@ -5,7 +5,7 @@
 #include <wx/listctrl.h>
 #include <wx/spinctrl.h>
 #include <wx/checkbox.h>
-#include <wx/settings.h>
+#include <wx/panel.h>
 #include <vector>
 #include <algorithm>
 
@@ -63,10 +63,15 @@ bool AvgGradeCalc::OnInit() {
 
 MyFrame::MyFrame() : wxFrame(nullptr, wxID_ANY, "Average Grade Calculator") {
     Centre();
-    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_FRAMEBK));
+
+    wxBoxSizer* mainSizer = new wxBoxSizer(wxHORIZONTAL);
+    wxPanel* panel = new wxPanel(this);
+    mainSizer->Add(panel, 1, wxEXPAND);
 
     wxBoxSizer* horizontalSizer = new wxBoxSizer(wxHORIZONTAL);
-    wxListView* list = new wxListView(this, ID_LIST, wxDefaultPosition, wxDefaultSize, 32L | wxLC_SINGLE_SEL);
+    panel->SetSizer(horizontalSizer);
+    
+    wxListView* list = new wxListView(panel, ID_LIST, wxDefaultPosition, wxDefaultSize, 32L | wxLC_SINGLE_SEL);
 
     horizontalSizer->Add(list, 1, wxEXPAND | wxALL, FromDIP(10));
     list->AppendColumn("Course");
@@ -77,46 +82,50 @@ MyFrame::MyFrame() : wxFrame(nullptr, wxID_ANY, "Average Grade Calculator") {
     horizontalSizer->Add(controlSizer, 0, wxALL, FromDIP(10));
 
     wxBoxSizer* buttonContainer = new wxBoxSizer(wxHORIZONTAL);
-    wxButton* removeButton = new wxButton(this, ID_REMOVE, "-", wxDefaultPosition, FromDIP(wxSize(40, -1)));
-    wxButton* upButton = new wxButton(this, ID_UP, "Up", wxDefaultPosition, FromDIP(wxSize(50, -1)));
-    wxButton* downButton = new wxButton(this, ID_DOWN, "Down", wxDefaultPosition, FromDIP(wxSize(50, -1)));
+    wxButton* addButton = new wxButton(panel, ID_ADD, "+", wxDefaultPosition, FromDIP(wxSize(40, -1)));
+    wxButton* removeButton = new wxButton(panel, ID_REMOVE, "-", wxDefaultPosition, FromDIP(wxSize(40, -1)));
+    wxButton* upButton = new wxButton(panel, ID_UP, "Up", wxDefaultPosition, FromDIP(wxSize(50, -1)));
+    wxButton* downButton = new wxButton(panel, ID_DOWN, "Down", wxDefaultPosition, FromDIP(wxSize(50, -1)));
     removeButton->Enable(false);
     upButton->Enable(false);
     downButton->Enable(false);
-    buttonContainer->Add(new wxButton(this, ID_ADD, "+", wxDefaultPosition, FromDIP(wxSize(40, -1))), 0, wxRIGHT, FromDIP(10));
+    buttonContainer->Add(addButton, 0, wxRIGHT, FromDIP(10));
     buttonContainer->Add(removeButton, 0, wxRIGHT, FromDIP(10));
     buttonContainer->Add(upButton, 0, wxRIGHT, FromDIP(10));
     buttonContainer->Add(downButton);
     controlSizer->Add(buttonContainer, 0, wxBOTTOM, FromDIP(20));
 
-    wxCheckBox* reselectRemoveBox = new wxCheckBox(this, wxID_ANY, "Select next after removal");
+    wxCheckBox* reselectRemoveBox = new wxCheckBox(panel, wxID_ANY, "Select next after removal");
     controlSizer->Add(reselectRemoveBox, 0, wxBOTTOM, FromDIP(20));
 
     wxFlexGridSizer* colControlContainer = new wxFlexGridSizer(3, 2, FromDIP(wxSize(10, 10)));
 
-    auto keyText = new wxTextCtrl(this, wxID_ANY);
-    colControlContainer->Add(new wxStaticText(this, wxID_ANY, "Course"), 1);
+    auto keyText = new wxTextCtrl(panel, wxID_ANY);
+    colControlContainer->Add(new wxStaticText(panel, wxID_ANY, "Course"), 1);
     colControlContainer->Add(keyText, 1);
 
-    auto gradeCtrl = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+    auto gradeCtrl = new wxSpinCtrl(panel, wxID_ANY, wxEmptyString, wxDefaultPosition,
         wxDefaultSize, wxALIGN_RIGHT | wxSP_ARROW_KEYS);
     gradeCtrl->SetRange(0, 20);
-    colControlContainer->Add(new wxStaticText(this, wxID_ANY, "Grade"), 1);
+    colControlContainer->Add(new wxStaticText(panel, wxID_ANY, "Grade"), 1);
     colControlContainer->Add(gradeCtrl, 1, wxEXPAND);
 
-    auto weightCtrl = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+    auto weightCtrl = new wxSpinCtrl(panel, wxID_ANY, wxEmptyString, wxDefaultPosition,
         wxDefaultSize, wxALIGN_RIGHT | wxSP_ARROW_KEYS);
-    colControlContainer->Add(new wxStaticText(this, wxID_ANY, "Weight"), 1);
+    colControlContainer->Add(new wxStaticText(panel, wxID_ANY, "Weight"), 1);
     colControlContainer->Add(weightCtrl, 1, wxEXPAND);
 
     controlSizer->Add(colControlContainer, 0, wxBOTTOM, FromDIP(20));
 
-    auto applyButton = new wxButton(this, ID_APPLY, "Apply");
+    auto applyButton = new wxButton(panel, ID_APPLY, "Apply");
     applyButton->Enable(false);
     controlSizer->Add(applyButton, 0, wxALIGN_CENTER | wxBOTTOM, FromDIP(20));
 
-    auto averageText = new wxStaticText(this, wxID_ANY, "Average: N/A");
+    auto averageText = new wxStaticText(panel, wxID_ANY, "Average: N/A");
     controlSizer->Add(averageText, 0, wxALIGN_CENTER);
+
+    list->MoveBeforeInTabOrder(addButton);
+    addButton->MoveBeforeInTabOrder(removeButton);
 
     Bind(wxEVT_BUTTON, [=](wxCommandEvent&) {
         list->InsertItem(0, keyText->GetValue());
@@ -224,5 +233,5 @@ MyFrame::MyFrame() : wxFrame(nullptr, wxID_ANY, "Average Grade Calculator") {
         updateAverageText(averageText);
     }, ID_APPLY);
 
-    SetSizerAndFit(horizontalSizer);
+    SetSizerAndFit(mainSizer);
 }

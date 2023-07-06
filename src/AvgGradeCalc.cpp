@@ -4,6 +4,7 @@
 #endif
 #include <wx/listctrl.h>
 #include <wx/spinctrl.h>
+#include <wx/checkbox.h>
 #include <wx/settings.h>
 #include <vector>
 #include <algorithm>

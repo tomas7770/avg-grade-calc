@@ -45,7 +45,13 @@ double calculateAverage() {
 }
 
 void updateAverageText(wxStaticText* averageText) {
-    averageText->SetLabelText("Average: " + wxString::Format(wxT("%f"), calculateAverage()));
+    double avg = calculateAverage();
+    wxString avgString;
+    if (isnan(avg))
+        avgString = "N/A";
+    else
+        avgString = wxString::Format(wxT("%f"), calculateAverage());
+    averageText->SetLabelText("Average: " + avgString);
 }
 
 bool AvgGradeCalc::OnInit() {

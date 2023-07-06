@@ -112,10 +112,13 @@ MyFrame::MyFrame() : wxFrame(nullptr, wxID_ANY, "Average Grade Calculator") {
     }, ID_ADD);
 
     Bind(wxEVT_BUTTON, [=](wxCommandEvent&) {
-        for (long i = list->GetFirstSelected(); i != -1; i = list->GetFirstSelected()) {
+        long prev_i = -1;
+        for (long i = list->GetFirstSelected(); i != -1; prev_i = i, i = list->GetFirstSelected()) {
             list->DeleteItem(i);
             entries.erase(entries.begin() + i);
         }
+        if (prev_i != -1)
+            list->Select(std::min((unsigned long long) prev_i, entries.size()-1));
         updateAverageText(averageText);
     }, ID_REMOVE);
 
